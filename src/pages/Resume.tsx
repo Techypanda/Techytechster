@@ -30,9 +30,12 @@ function Resume(props: DefaultProps) {
             </Document>
           </Box>
           <Box marginTop={2}>
-            <Grid container justify="center">
-              <Grid item xs={2}>
+            <Grid container justify="center" spacing={2}>
+              <Grid item xs={3}>
                 <div className="windowsbtn" onClick={() => history.push('/')}>Home</div>
+              </Grid>
+              <Grid item xs={3}>
+                <div className="windowsbtn" onClick={() => window.location.href = `${window.location.origin}/Jonathan_Wright_CV.pdf`}>Open Externally</div>
               </Grid>
             </Grid>
           </Box>
@@ -62,6 +65,7 @@ export default styled(Resume)`
      -moz-user-select: none; /* Old versions of Firefox */
       -ms-user-select: none; /* Internet Explorer/Edge */
           user-select: none;
+  color: #000;
 }
 .windowsbtn {
   background-color: #bbb !important;

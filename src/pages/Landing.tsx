@@ -2,7 +2,6 @@ import { DefaultProps } from "../interface";
 import styled from 'styled-components';
 import { Container, Typography, Box, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { Favorite, } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import Title from "../components/landing/Title";
 import Subtitle from "../components/landing/Subtitle";
@@ -31,15 +30,24 @@ function shuffleArray(array: Array<string>) {
   }
   return arr;
 }
-
+let intervalStatus = true;
 function Landing(props: DefaultProps) {
   const [tech, setTech] = useState([...Technology]);
   const history = useHistory();
   useEffect(() => {
     setInterval(() => {
-      setTech(shuffleArray(Technology))
-    }, 500);
+      if (intervalStatus) {
+        setTech(shuffleArray(Technology))
+      }
+    }, 1000);
   }, []);
+  function updateShuffle(state: boolean) {
+    if (state) {
+      intervalStatus = true;
+    } else {
+      intervalStatus = false;
+    }
+  }
   return (
     <div className={props.className}>
       <Box className={`bluescreen`} height="100vh" width="100vw" alignItems="center" display="flex">
@@ -49,13 +57,10 @@ function Landing(props: DefaultProps) {
             <Subtitle />
             <Typography variant="h6" component="h4" className="windowsfont" align="center">"I try to do fun things on the cloud and develop good software"</Typography>
           </Box>
-          <Box paddingTop={4}>
+          <Box paddingTop={4} onMouseEnter={() => updateShuffle(false)} onMouseLeave={() => updateShuffle(true)}>
             <Grid container spacing={2} justify="center">
               <Grid item className="bigtext">
-                I
-              </Grid>
-              <Grid item>
-                <Favorite />
+                I &lt;3
               </Grid>
               <Grid item className="bigtext">
                 -

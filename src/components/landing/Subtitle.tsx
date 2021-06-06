@@ -13,7 +13,6 @@ function Typed(props: DefaultProps) {
 export default styled(Typed)`
 .typewriter {
   width: 0;
-  font-size: 2em;
   overflow: hidden;
   white-space: nowrap;
   

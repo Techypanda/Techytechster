@@ -5,7 +5,7 @@ import { DefaultProps } from "../../interface";
 function Typed(props: DefaultProps) {
   return (
     <Box display="flex" justifyContent="center" className={props.className}>
-      <Typography variant="h3" component="h2" className={`windowsfont typewriter ${props.className}`} align="center">Jonathan Wright</Typography>
+      <Typography variant="h2" component="h2" className={`windowsfont typewriter ${props.className}`} align="center">Jonathan Wright</Typography>
     </Box>
   )
 }
@@ -13,7 +13,6 @@ function Typed(props: DefaultProps) {
 export default styled(Typed)`
 .typewriter {
   width: 0;
-  font-size: 2em;
   overflow: hidden;
   white-space: nowrap;
   
