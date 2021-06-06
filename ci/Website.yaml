@@ -38,6 +38,9 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - www.techytechster.com
+          - techytechster.com
         Origins:
           - DomainName: !GetAtt SourceBucket.RegionalDomainName
             Id: !Ref SourceBucket
@@ -69,7 +72,9 @@ Resources:
               - Origin
         PriceClass: PriceClass_All
         ViewerCertificate:
-          CloudFrontDefaultCertificate: true
+          AcmCertificateArn: arn:aws:acm:us-east-1:128153249323:certificate/5ed3969c-6f4e-4457-bf1a-639f39279c88
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
