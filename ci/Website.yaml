@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Description: Graphql Blog API for Techytechster.com
+Description: Website Template for techytechster.com
 
 Resources:
   SourceBucket:
