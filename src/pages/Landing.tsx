@@ -113,7 +113,7 @@ function Landing(props: DefaultProps) {
                   <div className="windowsbtn" onClick={() => history.push('/resume')}>Resume</div>
                 </Grid>
                 <Grid item xs={2}>
-                  <div className="windowsbtn" onClick={() => history.push('/projects')}>Blog</div>
+                  <div className="windowsbtn" onClick={() => history.push('/blog')}>Blog</div>
                 </Grid>
               </Grid>
             </Box>

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { DefaultProps } from "../interface";
@@ -6,7 +6,7 @@ import { DefaultProps } from "../interface";
 function NotFound(props: DefaultProps) {
   const history = useHistory();
   return (
-    <Box className={`${props.className}`} onClick={() => history.push("/")} onKeyPress={() => history.push("/")}>
+    <Box className={`${props.className}`}>
       <div className="ntofouncontainer">
         <div className="notfound">
           <div className="centered"><span className="inverted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;</div>
@@ -23,7 +23,14 @@ function NotFound(props: DefaultProps) {
           <div className="row">&nbsp;</div>
           <div className="centered">Press any key to continue...<span className="blink">&#9608;</span></div>
           <Box marginTop={2}>
-            <Typography variant="h6" component="h6">Credit to: <a href="https://codepen.io/agalliat/pen/mdedZYK" className="link">Angela Galliat</a></Typography>
+            <Grid container justify="center">
+              <Grid item>
+                <div className="windowsbtn" onClick={() => history.push('/')}>Return Home</div>
+              </Grid>
+            </Grid>
+          </Box>
+          <Box marginTop={2}>
+            <Typography variant="h6" component="h6" className="windowsfont">Credit to: <a href="https://codepen.io/agalliat/pen/mdedZYK" className="link">Angela Galliat</a></Typography>
           </Box>
         </div>
       </div>
@@ -40,6 +47,16 @@ export default styled(NotFound)`
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.windowsbtn {
+  background-color: #bbb !important;
+  color: #000084;
+  padding: 5px 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.windowsfont {
+  font-family: 'more_perfect_dos_vgaregular', 'Courier New', monospace !important;
 }
 .link {
   color: #CC0000;
