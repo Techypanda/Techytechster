@@ -29,6 +29,8 @@ jobs:
           name: Techytechster-WebsiteStack
           template: ./ci/Website.yaml
           no-fail-on-empty-changeset: "1"
+      - name: check perms
+        run: chmod +x ./ci/BuildTestDeploy.sh
       - name: BuildTestDeploy Script
         run: ./ci/BuildTestDeploy.sh
       - uses: jakejarvis/s3-sync-action@master
