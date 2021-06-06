@@ -1,5 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
-import styled, { css } from "styled-components";
+import styled  from "styled-components";
 import { DefaultProps } from "../../interface";
 
 function Typed(props: DefaultProps) {

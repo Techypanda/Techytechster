@@ -1,9 +1,8 @@
 import { DefaultProps } from "../interface";
 import styled from 'styled-components';
-import { Container, Typography, Box, Grid, Button } from "@material-ui/core";
+import { Container, Typography, Box, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { Favorite, GitHub, LinkedIn, Twitter } from "@material-ui/icons";
-import Logos from "../assets/logos.png";
+import { Favorite, } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import Title from "../components/landing/Title";
 import Subtitle from "../components/landing/Subtitle";

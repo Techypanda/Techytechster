@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import styled from "styled-components";
 import { DefaultProps } from "../interface";
 import { Document, Page } from 'react-pdf';
