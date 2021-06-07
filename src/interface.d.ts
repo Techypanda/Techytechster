@@ -7,7 +7,3 @@ export interface DefaultProps {
 export interface TypedProps extends DefaultProps {
   title: string;
 }
-export interface ScreenSize {
-  width: number;
-  height: number;
-}
