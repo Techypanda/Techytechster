@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Techytechster.com Website APIs
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  # HelloWorldFunction:
+  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  #   Properties:
+  #     PackageType: Image
+  #     Events:
+  #       CatchAll:
+  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+  #         Properties:
+  #           Path: /hello
+  #           Method: GET
+  #     # Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+  #     #   Variables:
+  #     #     PARAM1: VALUE
+  #   Metadata:
+  #     DockerTag: go1.x-v1
+  #     DockerContext: ./hello-world
+  #     Dockerfile: Dockerfile
+  WebsiteVisitorRecord:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: ./wmetric
+            Method: POST
+    Metadata:
+      DockerTag: go1.x-v1
+      DockerContext: ./wmetric
+      Dockerfile: Dockerfile
+
+
+Outputs:
+  TechytechsterAPI:
+    Description: "API Gateway endpoint URL for Prod Techytechster"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  # HelloWorldFunction:
+  #   Description: "First Lambda Function ARN"
+  #   Value: !GetAtt HelloWorldFunction.Arn
+  # HelloWorldFunctionIamRole:
+  #   Description: "Implicit IAM Role created for Hello World function"
+  #   Value: !GetAtt HelloWorldFunctionRole.Arn

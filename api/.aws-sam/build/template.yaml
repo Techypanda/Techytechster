@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Techytechster.com Website APIs
+
+  '
+Globals:
+  Function:
+    Timeout: 5
+Resources:
+  WebsiteVisitorRecord:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: ./wmetric
+            Method: POST
+      ImageUri: websitevisitorrecord:go1.x-v1
+    Metadata:
+      DockerTag: go1.x-v1
+      DockerContext: ./wmetric
+      Dockerfile: Dockerfile
+Outputs:
+  TechytechsterAPI:
+    Description: API Gateway endpoint URL for Prod Techytechster
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
