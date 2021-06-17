@@ -15,7 +15,7 @@ Resources:
         CatchAll:
           Type: Api
           Properties:
-            Path: ./wmetric
+            Path: /wmetric
             Method: POST
       ImageUri: websitevisitorrecord:go1.x-v1
     Metadata:
