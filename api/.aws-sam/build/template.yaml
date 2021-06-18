@@ -7,6 +7,24 @@ Globals:
   Function:
     Timeout: 5
 Resources:
+  WebsiteVisitTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: IPAddress
+        AttributeType: S
+      - AttributeName: Date
+        AttributeType: S
+      BillingMode: PROVISIONED
+      KeySchema:
+      - AttributeName: IPAddress
+        KeyType: HASH
+      - AttributeName: Date
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: Techytechster-Views
   WebsiteVisitorRecord:
     Type: AWS::Serverless::Function
     Properties:
@@ -17,13 +35,30 @@ Resources:
           Properties:
             Path: /wmetric
             Method: GET
+            RestApiId:
+              Ref: WebsiteAPI
+      Policies:
+        DynamoDBWritePolicy:
+          TableName:
+            Ref: WebsiteVisitTable
       ImageUri: websitevisitorrecord:go1.x-v1
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./wmetric
       Dockerfile: Dockerfile
+  WebsiteAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Description: APIS for Techytechster.com
+      Domain:
+        DomainName: api.techytechster.com
+        CertificateArn: arn:aws:acm:us-east-1:128153249323:certificate/f96e9425-e4f4-4389-a733-9e16828154dc
+        EndpointConfiguration: EDGE
+        Route53:
+          HostedZoneId: Z102258412TWJ99QD5B1H
 Outputs:
   TechytechsterAPI:
     Description: API Gateway endpoint URL for Prod Techytechster
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+      Ref: WebsiteAPI

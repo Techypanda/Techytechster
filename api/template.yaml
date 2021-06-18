@@ -21,6 +21,8 @@ Resources:
       KeySchema:
         - AttributeName: IPAddress
           KeyType: HASH
+        - AttributeName: Date
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -35,6 +37,7 @@ Resources:
           Properties:
             Path: /wmetric
             Method: GET
+            RestApiId: !Ref WebsiteAPI
       Policies:
         DynamoDBWritePolicy:
           TableName: !Ref WebsiteVisitTable
@@ -50,7 +53,7 @@ Resources:
       Domain:
         DomainName: api.techytechster.com
         CertificateArn: arn:aws:acm:us-east-1:128153249323:certificate/f96e9425-e4f4-4389-a733-9e16828154dc
-        EndpointConfiguration: EDGE
+        EndpointConfiguration: EDGE # Only one region
         Route53:
           HostedZoneId: Z102258412TWJ99QD5B1H
 
@@ -58,7 +61,7 @@ Resources:
 Outputs:
   TechytechsterAPI:
     Description: "API Gateway endpoint URL for Prod Techytechster"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Value: !Ref WebsiteAPI
   # HelloWorldFunction:
   #   Description: "First Lambda Function ARN"
   #   Value: !GetAtt HelloWorldFunction.Arn

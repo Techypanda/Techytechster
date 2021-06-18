@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "techytechsterwebapis"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-nsrpm712p7oe"
+s3_prefix = "techytechsterwebapis"
+region = "ap-southeast-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = ["WebsiteVisitorRecord=128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo"]
