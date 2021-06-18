@@ -27,12 +27,12 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: Techytechster-WebsiteStack
-          template: ./techytechsterfrontend/ci/Website.yaml
+          template: ./ci/Website.yaml
           no-fail-on-empty-changeset: "1"
       - name: check perms
-        run: chmod +x ./techytechsterfrontend/ci/BuildTestDeploy.sh
+        run: chmod +x ./ci/BuildTestDeploy.sh
       - name: BuildTestDeploy Frontend
-        run: ./techytechsterfrontend/ci/BuildTestDeploy.sh
+        run: ./ci/BuildTestDeploy.sh
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
