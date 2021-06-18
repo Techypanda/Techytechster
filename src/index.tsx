@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import './assets/style.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios'
 
+axios.get("https://api.techytechster.com/wmetric");
 ReactDOM.render(
   <React.StrictMode>
     <App />
