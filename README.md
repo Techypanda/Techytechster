@@ -1,31 +1,12 @@
-# React Modern Boilerplate
+# Techytechster
 
-When first getting started with a new react app you will need to install all of the annoying dependencies and make the 'boilerplate' react-dom setup.
-This boilerplate project will get you up and running with modern dependencies and typescript so you can focus on the code.
+Please visit https://techytechster.com to see the public static site.
+This repository is the sourcecode for my apis and static site, if you wish to fork/use this as a base for something else feel free to.
 
-## What Modern Dependencies Is Included?
-- [https://reactrouter.com/web/guides/quick-start](react-router-dom): Allows routing in a SPA context aswell as a NonSPA Context
-- [https://styled-components.com/docs/basics](styled-components): Allows you to do CSS in components to reduce coupling.
-- [https://www.typescriptlang.org/](typescript): All modern reactapps should force typescript as it reduces logic errors.
-- [https://react-query.tanstack.com/](react-query): Allows state management in a nice easy format, also gives you nice dev tools in a non production context.
-- [https://www.npmjs.com/package/node-sass](node-sass): Allows you to write css in a SCSS file, which will compile down to a efficient CSS file in production.
-- [https://github.com/axios/axios](axios): Modern javascript HTTP requests and GraphQL.
+## What does it run on?
 
-## Dev, Build, Test
-### Run In Development
-```sh
-yarn start OR npm run start
-```
-### Build For Production
-```sh
-yarn build or npm run build
-```
-### Test
-```sh
-yarn test or npm run test
-```
+I am a AWS shill so everything here runs on my AWS.
 
-## What Is React?
+## Dashboard Showing Static Site & API Status
 
-If you are just getting started with react please follow the official react docs, don't try going straight into a boilerplate setup like this or you will be overwhelmed.
-https://reactjs.org/docs/getting-started.html
+TODO
