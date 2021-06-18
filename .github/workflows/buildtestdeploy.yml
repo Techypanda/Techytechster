@@ -23,7 +23,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-2
-      - name: Deploy to AWS CloudFormation
+      - name: Deploy Infrastructure
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: Techytechster-WebsiteStack
@@ -31,7 +31,7 @@ jobs:
           no-fail-on-empty-changeset: "1"
       - name: check perms
         run: chmod +x ./ci/BuildTestDeploy.sh
-      - name: BuildTestDeploy Script
+      - name: BuildTestDeploy Frontend
         run: ./ci/BuildTestDeploy.sh
       - uses: jakejarvis/s3-sync-action@master
         with:
@@ -41,7 +41,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ap-southeast-2'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'build'      # optional: defaults to entire repository
+          SOURCE_DIR: './techytechsterfrontend/build'      # optional: defaults to entire repository
       - name: invalidate
         uses: chetan/invalidate-cloudfront-action@master
         env:
