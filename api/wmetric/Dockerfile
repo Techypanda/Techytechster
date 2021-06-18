@@ -11,7 +11,7 @@ RUN openssl s_client -showcerts -connect proxy.golang.org:443 </dev/null 2>/dev/
 RUN update-ca-certificates
 
 WORKDIR /go/src
-COPY go.mod go.sum main.go ./
+COPY go.mod go.sum *.go ./
 
 RUN go build -o ../bin
 
