@@ -16,7 +16,7 @@ Resources:
           Type: Api
           Properties:
             Path: /wmetric
-            Method: POST
+            Method: GET
       ImageUri: websitevisitorrecord:go1.x-v1
     Metadata:
       DockerTag: go1.x-v1

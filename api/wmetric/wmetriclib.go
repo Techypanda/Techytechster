@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
+	"fmt"
+	"time"
 )
 
 type WebsiteMetricData struct {
@@ -10,17 +10,12 @@ type WebsiteMetricData struct {
 	Date      *string
 }
 
-func ParseBody(payloadJSON string) (*WebsiteMetricData, error) {
+func ParseContext(ipadd string) (*WebsiteMetricData, error) {
 	var metric WebsiteMetricData
-	json.Unmarshal([]byte(payloadJSON), &metric)
-	if metric.IPAddress != nil {
-
-		return &metric, nil
-	} else {
-		if metric.IPAddress == nil {
-			return nil, errors.New("invalid payload, missing ip address")
-		} else {
-			return nil, errors.New("invalid payload, failure to process json")
-		}
-	}
+	metric.IPAddress = &ipadd
+	loc, err := time.LoadLocation("Australia/Perth")
+	timeNow := time.Now().In(loc)
+	currentDate := fmt.Sprint(timeNow.Format(time.RFC3339))
+	metric.Date = &currentDate
+	return &metric, err
 }

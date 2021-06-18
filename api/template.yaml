@@ -9,23 +9,22 @@ Globals:
     Timeout: 5
 
 Resources:
-  # HelloWorldFunction:
-  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-  #   Properties:
-  #     PackageType: Image
-  #     Events:
-  #       CatchAll:
-  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-  #         Properties:
-  #           Path: /hello
-  #           Method: GET
-  #     # Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-  #     #   Variables:
-  #     #     PARAM1: VALUE
-  #   Metadata:
-  #     DockerTag: go1.x-v1
-  #     DockerContext: ./hello-world
-  #     Dockerfile: Dockerfile
+  WebsiteVisitTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: IPAddress
+          AttributeType: S
+        - AttributeName: Date
+          AttributeType: S
+      BillingMode: PROVISIONED
+      KeySchema:
+        - AttributeName: IPAddress
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: Techytechster-Views
   WebsiteVisitorRecord:
     Type: AWS::Serverless::Function
     Properties:
@@ -35,11 +34,25 @@ Resources:
           Type: Api
           Properties:
             Path: /wmetric
-            Method: POST
+            Method: GET
+      Policies:
+        DynamoDBWritePolicy:
+          TableName: !Ref WebsiteVisitTable
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./wmetric
       Dockerfile: Dockerfile
+  WebsiteAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Description: APIS for Techytechster.com
+      Domain:
+        DomainName: api.techytechster.com
+        CertificateArn: arn:aws:acm:us-east-1:128153249323:certificate/f96e9425-e4f4-4389-a733-9e16828154dc
+        EndpointConfiguration: EDGE
+        Route53:
+          HostedZoneId: Z102258412TWJ99QD5B1H
 
 
 Outputs:
