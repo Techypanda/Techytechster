@@ -21,6 +21,7 @@ Resources:
         DeviceOnlyRememberedOnUserPrompt: True
       MfaConfiguration: "OFF" # MFA cost money, and I'm poor
       UserPoolName: "AdminUserPool"
+
   AdminLoginClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
@@ -46,11 +47,13 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
       SupportedIdentityProviders:
         - COGNITO
+
   AdminLoginPage:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       Domain: techytechsteradmin
       UserPoolId: !Ref AdminUserPool
+
   TechytechsterAPIS:
     Type: AWS::ECR::Repository
     Properties:
