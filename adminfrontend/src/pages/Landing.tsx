@@ -2,9 +2,8 @@ import { DefaultProps } from "../interface";
 import styled from 'styled-components';
 import { Container, Typography } from "@material-ui/core";
 import Unauthenticated from "./Unauthenticated";
-import { useQueryClient } from "react-query";
+import Authenticated from "./Authenticated";
 function Landing(props: DefaultProps) {
-  const client = useQueryClient();
   function TokenExpired() {
     if (localStorage.getItem('rToken') && localStorage.getItem('rTokenExpiry')) {
       try {
@@ -17,10 +16,11 @@ function Landing(props: DefaultProps) {
     }
     return true;
   }
-  
+
   return (
     <Container>
       { TokenExpired() &&  <Unauthenticated /> }
+      { !TokenExpired() && <Authenticated /> }
     </Container>
   )
 }
