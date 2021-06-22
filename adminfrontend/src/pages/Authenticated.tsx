@@ -1,4 +1,3 @@
-import { Box, Typography } from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import useCognitoToken from "../api/cognito";

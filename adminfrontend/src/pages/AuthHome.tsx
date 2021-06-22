@@ -7,9 +7,11 @@ function AuthHome(props: DefaultProps) {
 
   return (
     <Box className={props.className}>
-      <Box minHeight="100vh" className="bluebg" pt={2}>
-        <Typography align="center" variant="h4" component="h1" className="windowsfont">Techytechster Admin</Typography>
-        <Box mt={3}>
+      <Box minHeight="100vh" className="bluebg">
+        <Box pt={3}>
+          <Typography align="center" variant="h4" component="h1" className="windowsfont">Techytechster Admin</Typography>
+        </Box>
+        <Box mt={1}>
           <Modules />
         </Box>
       </Box>
