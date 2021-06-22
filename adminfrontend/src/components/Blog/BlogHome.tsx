@@ -18,8 +18,4 @@ function BlogHome(props: DefaultProps) {
 }
 
 export default styled(BlogHome)`
-.windowsfont {
-  color: rgb(187, 187, 187);
-  font-family: more_perfect_dos_vgaregular !important;
-}
 `;
