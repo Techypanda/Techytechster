@@ -15,7 +15,7 @@ function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route path="/">
             <Landing />
           </Route>
           <Route>
