@@ -1,6 +1,7 @@
 import { Box, TextField } from "@material-ui/core";
 import styled from "styled-components";
 import { DefaultProps } from "../../interface";
+import WindowsRichText from "../shared/WindowsRichText";
 import BlogNav from "./BlogNav";
 
 function BlogCreate(props: DefaultProps) {
@@ -11,6 +12,7 @@ function BlogCreate(props: DefaultProps) {
       <Box mt={2}>
         <TextField id="blog-title-input" label="Blog Title" variant="filled" className="windowsinput" fullWidth />
       </Box>
+      <WindowsRichText />
     </Box>
   )
 }
