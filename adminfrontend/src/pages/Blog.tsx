@@ -1,6 +1,7 @@
 import { Box, Container } from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
+import BlogCreate from "../components/Blog/BlogCreate";
 import BlogHome from "../components/Blog/BlogHome";
 import { DefaultProps } from "../interface";
 import NotFound from "./NotFound";
@@ -14,6 +15,9 @@ function Blog(props: DefaultProps) {
           <Switch>
             <Route exact path="/blog">
               <BlogHome />
+            </Route>
+            <Route exact path="/blog/create">
+              <BlogCreate />
             </Route>
             <Route>
               <NotFound />
