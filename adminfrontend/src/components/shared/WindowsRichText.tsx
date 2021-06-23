@@ -1,6 +1,6 @@
 import { Box, Typography } from "@material-ui/core";
 import styled from "styled-components";
-import { DefaultProps, WindowsStyleButtonProps } from "../../interface";
+import { WindowsRichTextProps, WindowsStyleButtonProps } from "../../interface";
 import { EditorState, RichUtils, AtomicBlockUtils } from 'draft-js';
 import Editor, { composeDecorators } from '@draft-js-plugins/editor';
 import createImagePlugin from '@draft-js-plugins/image';
@@ -8,7 +8,8 @@ import createAlignmentPlugin from '@draft-js-plugins/alignment';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import {stateToHTML} from 'draft-js-export-html';
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/focus/lib/plugin.css';
 import '@draft-js-plugins/alignment/lib/plugin.css';
@@ -67,7 +68,7 @@ const WindowsStyleButton = styled(RawStyleButton)`
 }
 `;
 
-function WindowsRichText(props: DefaultProps) {
+function WindowsRichText(props: WindowsRichTextProps) {
   const [editorState, setEditorState] = useState(
     () => EditorState.createEmpty(),
   );
@@ -93,6 +94,14 @@ function WindowsRichText(props: DefaultProps) {
       alert("Unable to process image");
     }
   };
+
+  function handleUpdate(e: SetStateAction<EditorState>) {
+    setEditorState(e);
+  }
+
+  useEffect(() => {
+    props.onChange(stateToHTML(editorState.getCurrentContent()));
+  }, [editorState, props]);
 
   function insertImage(editorState: any, base64: any) {
     const contentState = editorState.getCurrentContent();
@@ -208,16 +217,13 @@ function WindowsRichText(props: DefaultProps) {
         <div onClick={focus}>
           <Editor
             editorState={editorState}
-            onChange={setEditorState}
+            onChange={handleUpdate}
             plugins={plugins}
             // @ts-ignore
             ref={(element) => editor.current = element}
           />
           <AlignmentTool />
         </div>
-      </Box>
-      <Box mt={2}>
-        <WindowsBtn px={2} variant="h5" component="h4">Create</WindowsBtn>
       </Box>
     </Box>
   )

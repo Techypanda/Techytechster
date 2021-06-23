@@ -19,3 +19,6 @@ export interface WindowsStyleButtonProps extends DefaultProps {
   toggle: boolean;
   toggleVar?: boolean;
 }
+export interface WindowsRichTextProps extends DefaultProps {
+  onChange: (content: string) => void;
+}
