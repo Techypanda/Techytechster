@@ -25,6 +25,24 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       TableName: Techytechster-Views
+  WebsiteBlogTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: BlogTitle
+        AttributeType: S
+      - AttributeName: Date
+        AttributeType: S
+      BillingMode: PROVISIONED
+      KeySchema:
+      - AttributeName: BlogTitle
+        KeyType: HASH
+      - AttributeName: Date
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: Techytechster-Blog
   WebsiteVisitorRecord:
     Type: AWS::Serverless::Function
     Properties:
@@ -45,6 +63,27 @@ Resources:
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./wmetric
+      Dockerfile: Dockerfile
+  BlogCUDEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /blog/{operation+}
+            Method: POST
+            RestApiId:
+              Ref: WebsiteAPI
+      Policies:
+        DynamoDBWritePolicy:
+          TableName:
+            Ref: WebsiteVisitTable
+      ImageUri: blogcudendpoint:go1.x-v1
+    Metadata:
+      DockerTag: go1.x-v1
+      DockerContext: ./blog
       Dockerfile: Dockerfile
   WebsiteAPI:
     Type: AWS::Serverless::Api
