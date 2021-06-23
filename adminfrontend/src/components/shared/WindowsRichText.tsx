@@ -1,13 +1,37 @@
 import { Box, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { DefaultProps, WindowsStyleButtonProps } from "../../interface";
-import { EditorState, RichUtils } from 'draft-js';
-import Editor from '@draft-js-plugins/editor';
+import { EditorState, RichUtils, AtomicBlockUtils } from 'draft-js';
+import Editor, { composeDecorators } from '@draft-js-plugins/editor';
 import createImagePlugin from '@draft-js-plugins/image';
-import { useState } from "react";
+import createAlignmentPlugin from '@draft-js-plugins/alignment';
+import createFocusPlugin from '@draft-js-plugins/focus';
+import createResizeablePlugin from '@draft-js-plugins/resizeable';
+import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
+import { ChangeEvent, useRef, useState } from "react";
 import 'draft-js/dist/Draft.css';
+import '@draft-js-plugins/focus/lib/plugin.css';
+import '@draft-js-plugins/alignment/lib/plugin.css';
 import WindowsBtn from "./WindowsBtn";
-import { Code, FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatQuote, FormatUnderlined } from "@material-ui/icons"
+import { Code, FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatQuote, FormatUnderlined, Image } from "@material-ui/icons";
+
+
+const focusPlugin = createFocusPlugin();
+const resizeablePlugin = createResizeablePlugin();
+const alignmentPlugin = createAlignmentPlugin();
+const blockDndPlugin = createBlockDndPlugin();
+const { AlignmentTool } = alignmentPlugin;
+
+const decorator = composeDecorators(
+  resizeablePlugin.decorator,
+  alignmentPlugin.decorator,
+  focusPlugin.decorator,
+  blockDndPlugin.decorator
+)
+
+const imagePlugin = createImagePlugin({ decorator });
+
+const plugins = [imagePlugin, blockDndPlugin, focusPlugin, alignmentPlugin, resizeablePlugin];
 
 const RawStyleButton = (props: WindowsStyleButtonProps) => {
   if (!props.toggle) {
@@ -47,8 +71,42 @@ function WindowsRichText(props: DefaultProps) {
   const [editorState, setEditorState] = useState(
     () => EditorState.createEmpty(),
   );
-  const imagePlugin = createImagePlugin();
-  const plugins = [imagePlugin];
+  const editor = useRef();
+  const focus = () => {
+    // @ts-ignore
+    editor.current.focus();
+  }
+  function handleImgUpload(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files![0];
+      const reader = new FileReader();
+      reader.onloadend = (e) => {
+        if (reader.result) {
+          const newEditorState = insertImage(editorState, reader.result);
+          setEditorState(newEditorState);
+        } else {
+          alert("Unable to process image");
+        }
+      }
+      reader.readAsDataURL(file);
+    } else {
+      alert("Unable to process image");
+    }
+  };
+
+  function insertImage(editorState: any, base64: any) {
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "image",
+      "IMMUTABLE",
+      { src: base64 }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity
+    });
+    return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
+  };
   return (
     <Box className={props.className} mt={2}>
       <Box className="graybg" p={2}>
@@ -139,8 +197,27 @@ function WindowsRichText(props: DefaultProps) {
           >
             <Code />
           </WindowsStyleButton>
+          <WindowsStyleButton
+            onClick={() => { /* handleClick() */ document.getElementById('imgupload')!.click() }}
+            toggle={false}
+          >
+            <Image />
+          </WindowsStyleButton>
+          <input id="imgupload" type="file" name="name" accept="image/*" hidden onChange={handleImgUpload} />
         </Box>
-        <Editor editorState={editorState} onChange={setEditorState} />
+        <div onClick={focus}>
+          <Editor
+            editorState={editorState}
+            onChange={setEditorState}
+            plugins={plugins}
+            // @ts-ignore
+            ref={(element) => editor.current = element}
+          />
+          <AlignmentTool />
+        </div>
+      </Box>
+      <Box mt={2}>
+        <WindowsBtn px={2} variant="h5" component="h4">Create</WindowsBtn>
       </Box>
     </Box>
   )
@@ -155,5 +232,8 @@ export default styled(WindowsRichText)`
 }
 .bold {
   font-weight: 600;
+}
+figure {
+  margin: 0;
 }
 `;
