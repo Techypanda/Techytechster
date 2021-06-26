@@ -33,7 +33,7 @@ func CreateEndpoint(rawPayload events.APIGatewayProxyRequest) events.APIGatewayP
 			StatusCode: http.StatusBadRequest,
 		}
 	} else {
-		log.Printf("%s, %s, %s", payload.Title, payload.Content, payload.Date)
+		log.Printf("Creating new post called: %s, created by %s", payload.Title, payload.Author)
 		return events.APIGatewayProxyResponse{
 			Headers: map[string]string{
 				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
