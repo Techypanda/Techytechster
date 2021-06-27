@@ -13,15 +13,27 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/lestrrat-go/jwx/jwk"
 )
+
+type DynamoDBBlog struct {
+	BlogTitle string
+	Content   string
+	Date      string
+	Author    string
+}
 
 type BlogPost struct {
 	Title   string
 	Content string
 	Date    string
 	Author  string
+}
+
+type DeleteRequest struct {
+	Title string
 }
 
 func CreateEndpoint(rawPayload events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
@@ -94,14 +106,67 @@ func CreateEndpoint(rawPayload events.APIGatewayProxyRequest) events.APIGatewayP
 
 func DeleteEndpoint(rawPayload events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
 	log.Println("Delete endpoint begun")
-	return events.APIGatewayProxyResponse{
-		Headers: map[string]string{
-			"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-			"Access-Control-Allow-Origin":  "*",
-			"Access-Control-Allow-Methods": "OPTIONS,POST",
-		},
-		Body:       "Delete Endpoint",
-		StatusCode: http.StatusOK,
+	auth, authErr := validateJWT(rawPayload.Headers["Authorization"])
+	if authErr != nil {
+		log.Printf("Error occured in JWT validation: %v", authErr.Error())
+		return events.APIGatewayProxyResponse{
+			Headers: map[string]string{
+				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "OPTIONS,POST",
+			},
+			Body:       fmt.Sprintf("Error occured in JWT validation: %v", authErr.Error()),
+			StatusCode: http.StatusUnauthorized,
+		}
+	}
+	if auth {
+		payload, err := processDeletePayload(rawPayload)
+		if err != nil {
+			return events.APIGatewayProxyResponse{
+				Headers: map[string]string{
+					"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+					"Access-Control-Allow-Origin":  "*",
+					"Access-Control-Allow-Methods": "OPTIONS,POST",
+				},
+				Body:       fmt.Sprintf("Error occured in JSON payload: %v", err.Error()),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		log.Printf("Attempting to delete: %s", payload.Title)
+		err = deleteBlog(payload.Title)
+		if err != nil {
+			log.Printf("Failed to delete due to error: %s", err.Error())
+			return events.APIGatewayProxyResponse{
+				Headers: map[string]string{
+					"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+					"Access-Control-Allow-Origin":  "*",
+					"Access-Control-Allow-Methods": "OPTIONS,POST",
+				},
+				Body:       fmt.Sprintf("Error occured in deleting post: %v", err.Error()),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		log.Printf("Successfully Deleted: %s", payload.Title)
+		return events.APIGatewayProxyResponse{
+			Headers: map[string]string{
+				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "OPTIONS,POST",
+			},
+			Body:       "Deleted post successfully",
+			StatusCode: http.StatusOK,
+		}
+	} else {
+		log.Println("Failed authentication")
+		return events.APIGatewayProxyResponse{
+			Headers: map[string]string{
+				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "OPTIONS,POST",
+			},
+			Body:       "Failed To Validate JWT",
+			StatusCode: http.StatusUnauthorized,
+		}
 	}
 }
 
@@ -142,6 +207,17 @@ func processPayload(payload events.APIGatewayProxyRequest) (*BlogPost, error) {
 	return &post, nil
 }
 
+func processDeletePayload(payload events.APIGatewayProxyRequest) (*DeleteRequest, error) {
+	var req DeleteRequest
+	if err := json.Unmarshal([]byte(payload.Body), &req); err != nil {
+		return nil, fmt.Errorf("error unmarshling payload: %v", err.Error())
+	}
+	if req.Title == "" {
+		return nil, errors.New("post title is empty in payload")
+	}
+	return &req, nil
+}
+
 const cognitoJWKSURI string = "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_dXWQJmeqM/.well-known/jwks.json"
 
 func validateJWT(accessTokenString string) (bool, error) {
@@ -171,14 +247,45 @@ func validateJWT(accessTokenString string) (bool, error) {
 	return true, nil
 }
 
-func putBlog(post BlogPost) error {
+func deleteBlog(blogTitle string) error {
+	log.Printf("Attempting to delete blog: %s", blogTitle)
+	post, err := getBlog(blogTitle)
+	if err != nil {
+		return err
+	}
+	newSession := session.Must(session.NewSession())
+	client := dynamodb.New(newSession, aws.NewConfig().WithRegion("ap-southeast-2"))
+	if client != nil {
+		input := &dynamodb.DeleteItemInput{
+			Key: map[string]*dynamodb.AttributeValue{
+				"BlogTitle": {
+					S: aws.String(post.Title),
+				},
+				"Date": {
+					S: aws.String(post.Date),
+				},
+			},
+			TableName: aws.String("Techytechster-Blog"),
+		}
+		_, err := client.DeleteItem(input)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		log.Printf("Failed to initialize dynamodb client!")
+		return errors.New("dynamodb client could not be initialized")
+	}
+}
+
+func getBlog(blogTitle string) (*BlogPost, error) {
 	newSession := session.Must(session.NewSession())
 	client := dynamodb.New(newSession, aws.NewConfig().WithRegion("ap-southeast-2"))
 	if client != nil {
 		input := &dynamodb.QueryInput{
 			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 				":title": {
-					S: aws.String(post.Title),
+					S: aws.String(blogTitle),
 				},
 			},
 			KeyConditionExpression: aws.String("BlogTitle = :title"),
@@ -186,12 +293,39 @@ func putBlog(post BlogPost) error {
 		}
 		result, getErr := client.Query(input)
 		if getErr != nil {
-			log.Printf("Failed to create blog: %s", getErr.Error())
-			return getErr
+			return nil, getErr
 		}
-		if *result.Count >= 1 {
-			log.Printf("Failed to create blog, it already exists")
+		if *result.Count > 0 {
+			ddb := DynamoDBBlog{}
+			err := dynamodbattribute.UnmarshalMap(result.Items[0], &ddb)
+			if err != nil {
+				return nil, err
+			}
+			post := BlogPost{
+				Title:   ddb.BlogTitle,
+				Content: ddb.Content,
+				Date:    ddb.Date,
+				Author:  ddb.Author,
+			}
+			return &post, nil
+		} else {
+			return nil, errors.New("there is no blog with that title")
+		}
+	} else {
+		return nil, errors.New("unable to construct dynamodb client")
+	}
+}
+
+func putBlog(post BlogPost) error {
+	newSession := session.Must(session.NewSession())
+	client := dynamodb.New(newSession, aws.NewConfig().WithRegion("ap-southeast-2"))
+	if client != nil {
+		_, getErr := getBlog(post.Title)
+		if getErr == nil {
 			return errors.New("that blog already exists, please use update endpoint instead")
+		}
+		if getErr.Error() != "there is no blog with that title" {
+			return getErr
 		}
 		data := &dynamodb.PutItemInput{
 			Item: map[string]*dynamodb.AttributeValue{
