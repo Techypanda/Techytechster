@@ -77,7 +77,7 @@ Resources:
             RestApiId:
               Ref: WebsiteAPI
       Policies:
-        DynamoDBWritePolicy:
+        DynamoDBCrudPolicy:
           TableName:
             Ref: WebsiteBlogTable
       ImageUri: blogcudendpoint:go1.x-v1

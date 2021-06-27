@@ -18,8 +18,6 @@ build
 .env.test.local
 .env.production.local
 
-.aws-sam
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
