@@ -79,7 +79,7 @@ Resources:
       Policies:
         DynamoDBWritePolicy:
           TableName:
-            Ref: WebsiteVisitTable
+            Ref: WebsiteBlogTable
       ImageUri: blogcudendpoint:go1.x-v1
     Metadata:
       DockerTag: go1.x-v1
