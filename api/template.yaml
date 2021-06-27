@@ -75,7 +75,7 @@ Resources:
             Method: POST
             RestApiId: !Ref WebsiteAPI
       Policies:
-        DynamoDBWritePolicy:
+        DynamoDBCrudPolicy:
           TableName: !Ref WebsiteBlogTable
     Metadata:
       DockerTag: go1.x-v1
