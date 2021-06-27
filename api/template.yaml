@@ -76,7 +76,7 @@ Resources:
             RestApiId: !Ref WebsiteAPI
       Policies:
         DynamoDBWritePolicy:
-          TableName: !Ref WebsiteVisitTable
+          TableName: !Ref WebsiteBlogTable
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./blog
