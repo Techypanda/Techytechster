@@ -73,7 +73,7 @@ Resources:
           Type: Api
           Properties:
             Path: /blog/{operation+}
-            Method: GET, POST
+            Method: ANY
             RestApiId:
               Ref: WebsiteAPI
       Policies:

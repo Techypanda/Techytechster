@@ -72,7 +72,7 @@ Resources:
           Type: Api
           Properties:
             Path: /blog/{operation+} # create/update/delete
-            Method: GET, POST
+            Method: ANY
             RestApiId: !Ref WebsiteAPI
       Policies:
         DynamoDBCrudPolicy:
