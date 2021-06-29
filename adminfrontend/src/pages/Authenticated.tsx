@@ -1,6 +1,7 @@
+import { useQueryClient } from "react-query";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import useCognitoToken from "../api/cognito";
+import useCognitoToken, { useUsername } from "../api/cognito";
 import { DefaultProps } from "../interface";
 import AuthHome from './AuthHome';
 import Blog from "./Blog";
@@ -8,7 +9,9 @@ import NotFound from "./NotFound";
 import Projects from "./Projects";
 
 function Authenticated(props: DefaultProps) {
+  const client = useQueryClient();
   useCognitoToken();
+  useUsername(client);
   return (
     <Switch>
       <Route exact path="/">
