@@ -5,22 +5,63 @@ import { DefaultProps } from "../../interface";
 import WindowsBtn from "../shared/WindowsBtn";
 import WindowsRichText from "../shared/WindowsRichText";
 import BlogNav from "./BlogNav";
-import { decode } from "jsonwebtoken";
+import { useQueryClient } from "react-query";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import SyncLoader from "react-spinners/SyncLoader";
+import { useHistory } from "react-router-dom";
+
 
 function BlogCreate(props: DefaultProps) {
+  const history = useHistory();
+  const client = useQueryClient();
   const [blogTitle, setBlogTitle] = useState("");
   const [blogContent, setBlogContent] = useState("");
-  function createBlog() {
-    const newBlog = {
-      blogTitle,
-      blogContent
+  const [loading, setLoading] = useState(false);
+  async function createBlog() {
+    const CreateBlogPayload = {
+      title: blogTitle,
+      content: blogContent,
+      author: await client.getQueryData("username")
     }
-    if (!newBlog.blogTitle) {
+    if (!CreateBlogPayload.title) {
       alert("Missing Blog Title");
-    } else if (!newBlog.blogContent) {
+    } else if (!CreateBlogPayload.content) {
       alert("Missing Blog Content");
     } else {
-      console.log(newBlog);
+      setLoading(true);
+      axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
+        headers: {
+          authorization: await client.getQueryData("token")
+        }
+      }).then((resp: AxiosResponse) => {
+        alert(resp.data)
+        setLoading(false);
+        history.push("/blog");
+      }).catch(async (err: AxiosError) => {
+        if (err.response?.status === 401) {
+          await client.refetchQueries("token")
+          axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
+            headers: {
+              authorization: await client.getQueryData("token")
+            }
+          }).then((resp: AxiosResponse) => {
+            alert(resp.data);
+            setLoading(false);
+            history.push("/blog");
+          }).catch(async (err: AxiosError) => {
+            if (err.response?.status === 401) {
+              localStorage.clear();
+              window.location.href = "/";
+            } else {
+              alert(err.response?.data)
+              setLoading(false);
+            }
+          })
+        } else {
+          alert(err.response?.data)
+          setLoading(false);
+        }
+      })
     }
   }
   return (
@@ -32,6 +73,9 @@ function BlogCreate(props: DefaultProps) {
       <WindowsRichText onChange={(content: string) => setBlogContent(content)} />
       <Box mt={2}>
         <WindowsBtn px={2} variant="h5" component="h4" onClick={() => createBlog()}>Create</WindowsBtn>
+      </Box>
+      <Box position="absolute" height="100vh" width="100vw" top={0} left={0} display={loading ? "block" : "none"} className="loadingbg">
+        <SyncLoader color="rgb(187,187,187)" loading={loading} size={50} />
       </Box>
     </Box>
   )
@@ -53,5 +97,16 @@ export default styled(BlogCreate)`
 .windowsfont {
   color: rgb(187, 187, 187);
   font-family: more_perfect_dos_vgaregular !important;
+}
+.loadingbg {
+  z-index: 999;
+  background-color: rgba(0,0,132, 0.25);
+}
+.loadingbg .css-1xdhyk6 {
+  z-index: 9999;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50vh;
+  left: 50vw;
 }
 `;
