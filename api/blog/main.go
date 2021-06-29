@@ -33,21 +33,27 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			}
 		}
 		if response.StatusCode != http.StatusOK {
-			log.Printf("Failed to requested operation")
+			log.Printf("Failed to complete requested operation")
 		} else {
 			log.Printf("Successfully performed requested operation")
 		}
 		return response, nil
 	} else if request.HTTPMethod == "GET" {
-		return events.APIGatewayProxyResponse{
-			Headers: map[string]string{
-				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-				"Access-Control-Allow-Origin":  "*",
-				"Access-Control-Allow-Methods": "OPTIONS,POST",
-			},
-			Body:       "Not Implemented",
-			StatusCode: http.StatusNotImplemented,
-		}, nil
+		operation := request.PathParameters["operation"]
+		log.Printf("IP %v is attempting operation: %s", request.RequestContext.Identity.SourceIP, operation)
+		var response events.APIGatewayProxyResponse
+		switch strings.ToUpper(operation) {
+		case "ALL":
+			response = GetAllEndpoint(request)
+		default:
+			response = GetBlogEndpoint(request)
+		}
+		if response.StatusCode != http.StatusOK {
+			log.Printf("Failed to complete requested operation")
+		} else {
+			log.Printf("Successfully performed requested operation")
+		}
+		return response, nil
 	} else {
 		return events.APIGatewayProxyResponse{
 			Headers: map[string]string{

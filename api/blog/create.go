@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -103,7 +104,7 @@ func CreateBlog(post BlogPost) error {
 		data := &dynamodb.PutItemInput{
 			Item: map[string]*dynamodb.AttributeValue{
 				"BlogTitle": {
-					S: aws.String(post.Title),
+					S: aws.String(strings.ToUpper(post.Title)),
 				},
 				"Date": {
 					S: aws.String(post.Date),
