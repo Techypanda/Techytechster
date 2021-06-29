@@ -104,7 +104,7 @@ func CreateBlog(post BlogPost) error {
 		data := &dynamodb.PutItemInput{
 			Item: map[string]*dynamodb.AttributeValue{
 				"BlogTitle": {
-					S: aws.String(strings.ToUpper(post.Title)),
+					S: aws.String(strings.Title(strings.ToLower(post.Title))),
 				},
 				"Date": {
 					S: aws.String(post.Date),

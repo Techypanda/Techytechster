@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -50,6 +51,7 @@ func ValidateJWT(accessTokenString string) (bool, error) {
 }
 
 func GetBlog(blogTitle string) (*BlogPost, error) {
+	blogTitle = strings.Title(strings.ToLower(blogTitle))
 	newSession := session.Must(session.NewSession())
 	client := dynamodb.New(newSession, aws.NewConfig().WithRegion("ap-southeast-2"))
 	if client != nil {

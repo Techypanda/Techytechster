@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
@@ -95,7 +96,7 @@ func DeleteBlog(blogTitle string) error {
 		input := &dynamodb.DeleteItemInput{
 			Key: map[string]*dynamodb.AttributeValue{
 				"BlogTitle": {
-					S: aws.String(post.Title),
+					S: aws.String(strings.Title(strings.ToLower(post.Title))),
 				},
 				"Date": {
 					S: aws.String(post.Date),
