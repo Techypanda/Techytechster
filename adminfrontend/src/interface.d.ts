@@ -13,6 +13,22 @@ export interface WindowsBtnProps extends DefaultProps {
   variant?: "inherit" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "subtitle1" | "subtitle2" | "body1" | "body2" | "caption" | "button" | "overline" | "srOnly";
   component?: React.ElementType<any>;
 }
+export interface Blog {
+  BlogTitle: string;
+  Content: string;
+  Date: string;
+  Author: string;
+}
+export interface BlogPrviewProps extends DefaultProps {
+  blog: Blog
+}
+export interface BlogListProps extends DefaultProps {
+  Posts: Blog[]
+}
+export interface BlogPageNavProps extends DefaultProps {
+  pageCount: number;
+  changePage: () => void;
+}
 export interface WindowsStyleButtonProps extends DefaultProps {
   children: React.ReactNode;
   onClick: () => void;
