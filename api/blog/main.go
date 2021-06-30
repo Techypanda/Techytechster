@@ -21,6 +21,8 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			response = UpdateEndpoint(request)
 		case "DELETE":
 			response = DeleteEndpoint(request)
+		case "ALL":
+			response = GetAllEndpoint(request)
 		default:
 			response = events.APIGatewayProxyResponse{
 				Headers: map[string]string{
