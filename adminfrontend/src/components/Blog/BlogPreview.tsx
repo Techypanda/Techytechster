@@ -1,16 +1,18 @@
 import { Box, Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { BlogPrviewProps } from "../../interface";
 
 function BlogPreview(props: BlogPrviewProps) {
+  const history = useHistory();
   return (
     <Box className={props.className}>
       <Box className="graybg" p={1.5}>
         <Box>
-          <Typography variant="h5" component="h2" className="msblue redirect">{props.blog.BlogTitle}</Typography>
+          <Typography variant="h5" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>{props.blog.BlogTitle}</Typography>
         </Box>
         <Box>
-          <Typography variant="subtitle2" component="h2" className="msblue redirect">Written by {props.blog.Author} on {(new Date(props.blog.Date)).toString()}</Typography>
+          <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>Written by {props.blog.Author} on {(new Date(props.blog.Date)).toString()}</Typography>
         </Box>
         <Box mt={2}>
           <div id="content" dangerouslySetInnerHTML={{ __html: props.blog.Content }} />
