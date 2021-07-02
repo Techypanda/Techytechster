@@ -18,7 +18,7 @@ type UpdateRequest struct {
 	NewContent string
 	OldAuthor  string
 	NewAuthor  string
-	Date       string
+	Date       int64
 }
 
 func UpdateEndpoint(rawPayload events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
@@ -128,7 +128,7 @@ func processUpdatePayload(payload events.APIGatewayProxyRequest) (*UpdateRequest
 		return nil, errors.New("error loading australia/perth time")
 	}
 	timeNow := time.Now().In(loc)
-	currentDate := fmt.Sprint(timeNow.Format(time.RFC3339))
+	currentDate := timeNow.UnixNano()
 	req.Date = currentDate
 	return &req, nil
 }

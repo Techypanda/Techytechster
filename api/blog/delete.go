@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -99,7 +100,7 @@ func DeleteBlog(blogTitle string) error {
 					S: aws.String(strings.Title(strings.ToLower(post.Title))),
 				},
 				"Date": {
-					S: aws.String(post.Date),
+					N: aws.String(strconv.FormatInt(post.Date, 10)),
 				},
 			},
 			TableName: aws.String("Techytechster-Blog"),

@@ -17,7 +17,7 @@ import (
 type DynamoDBBlog struct {
 	BlogTitle string
 	Content   string
-	Date      string
+	Date      int64
 	Author    string
 }
 

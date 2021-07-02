@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -18,7 +19,7 @@ import (
 type BlogPost struct {
 	Title   string
 	Content string
-	Date    string
+	Date    int64
 	Author  string
 }
 
@@ -107,7 +108,7 @@ func CreateBlog(post BlogPost) error {
 					S: aws.String(strings.Title(strings.ToLower(post.Title))),
 				},
 				"Date": {
-					S: aws.String(post.Date),
+					S: aws.String(strconv.FormatInt(post.Date, 10)),
 				},
 				"Content": {
 					S: aws.String(post.Content),
@@ -144,7 +145,7 @@ func processPayload(payload events.APIGatewayProxyRequest) (*BlogPost, error) {
 		return nil, errors.New("error loading australia/perth time")
 	}
 	timeNow := time.Now().In(loc)
-	currentDate := fmt.Sprint(timeNow.Format(time.RFC3339))
-	post.Date = currentDate
+	epoch := timeNow.UnixNano()
+	post.Date = epoch
 	return &post, nil
 }
