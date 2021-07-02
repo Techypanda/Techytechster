@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { BlogPageNavProps } from "../../interface";
 import WindowsBtn from "../shared/WindowsBtn";

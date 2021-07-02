@@ -35,6 +35,7 @@ function BlogCreate(props: DefaultProps) {
         }
       }).then((resp: AxiosResponse) => {
         alert(resp.data)
+        client.removeQueries("blog")
         setLoading(false);
         history.push("/blog");
       }).catch(async (err: AxiosError) => {
@@ -46,6 +47,7 @@ function BlogCreate(props: DefaultProps) {
             }
           }).then((resp: AxiosResponse) => {
             alert(resp.data);
+            client.removeQueries("blog")
             setLoading(false);
             history.push("/blog");
           }).catch(async (err: AxiosError) => {

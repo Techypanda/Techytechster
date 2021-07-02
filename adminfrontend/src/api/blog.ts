@@ -5,7 +5,7 @@ import { Page } from "../interface"
 async function fetchBlogpage(pageKey: string | undefined) {
   const payload = {
     NextPage: pageKey,
-    PageCount: 1
+    PageCount: 5
   }
   return await axios.post("https://api.techytechster.com/blog/all", payload)
 }
