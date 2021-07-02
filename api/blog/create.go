@@ -108,7 +108,7 @@ func CreateBlog(post BlogPost) error {
 					S: aws.String(strings.Title(strings.ToLower(post.Title))),
 				},
 				"Date": {
-					S: aws.String(strconv.FormatInt(post.Date, 10)),
+					N: aws.String(strconv.FormatInt(post.Date, 10)),
 				},
 				"Content": {
 					S: aws.String(post.Content),
