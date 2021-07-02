@@ -1,16 +1,16 @@
 import axios from "axios"
 import { useQuery } from "react-query"
+import { Page } from "../interface"
 
 async function fetchBlogpage(pageKey: string | undefined) {
   const payload = {
     NextPage: pageKey,
-    PageCount: 5
+    PageCount: 1
   }
   return await axios.post("https://api.techytechster.com/blog/all", payload)
 }
-export function useBlog(pageKey: string | undefined, pageNumber: number) {
-  return useQuery(["blog", pageNumber], async () => {
-    console.log('reached')
-    return await fetchBlogpage(pageKey)
+export function useBlog(page: Page) {
+  return useQuery(["blog", page.pageNo], async () => {
+    return await fetchBlogpage(page.pageKey)
   }, { staleTime: Number.MAX_VALUE })
 }

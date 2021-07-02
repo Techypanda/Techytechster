@@ -7,8 +7,8 @@ function BlogList(props: BlogListProps) {
   if (props.Posts.length > 0) {
     return (
       <Box className={props.className}>
-        {props.Posts.map((post) =>
-          <Box mb={2}>
+        {props.Posts.map((post, i) =>
+          <Box mb={2} key={i}>
             <BlogPreview blog={post} />
           </Box>
         )}

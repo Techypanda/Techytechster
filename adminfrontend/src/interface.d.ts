@@ -10,8 +10,13 @@ export interface WindowsBtnProps extends DefaultProps {
   onMouseDown?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
   px?: number;
   py?: number;
+  mr?: number;
   variant?: "inherit" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "subtitle1" | "subtitle2" | "body1" | "body2" | "caption" | "button" | "overline" | "srOnly";
   component?: React.ElementType<any>;
+}
+export interface Page {
+  pageNo: number;
+  pageKey: string | undefined;
 }
 export interface Blog {
   BlogTitle: string;
@@ -27,7 +32,8 @@ export interface BlogListProps extends DefaultProps {
 }
 export interface BlogPageNavProps extends DefaultProps {
   pageCount: number;
-  changePage: () => void;
+  nextPage: () => void;
+  prevPage: () => void;
 }
 export interface WindowsStyleButtonProps extends DefaultProps {
   children: React.ReactNode;
