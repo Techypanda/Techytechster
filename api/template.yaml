@@ -34,7 +34,7 @@ Resources:
         - AttributeName: BlogTitle
           AttributeType: S
         - AttributeName: Date
-          AttributeType: S
+          AttributeType: N
       BillingMode: PROVISIONED
       KeySchema:
         - AttributeName: BlogTitle

@@ -48,16 +48,8 @@ func GetAllEndpoint(request events.APIGatewayProxyRequest) events.APIGatewayProx
 
 	payload, err := interpretPayload(request)
 	if err != nil {
-		log.Printf("Failed to interpret payload: %s", err.Error())
-		return events.APIGatewayProxyResponse{
-			Headers: map[string]string{
-				"Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-				"Access-Control-Allow-Origin":  "*",
-				"Access-Control-Allow-Methods": "OPTIONS,POST",
-			},
-			Body:       fmt.Sprintf("Failed to interpret payload: %s", err.Error()),
-			StatusCode: http.StatusBadRequest,
-		}
+		log.Printf("Failed to interpret payload: %s, assuming default payload!", err.Error())
+		payload = new(GetAllPayload)
 	}
 
 	if payload.PageCount != nil {
