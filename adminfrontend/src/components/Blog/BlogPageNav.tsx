@@ -15,7 +15,7 @@ function BlogPageNav(props: BlogPageNavProps) {
       </Box>
       <Box mt={2} display="flex" justifyContent="flex-end">
         <WindowsBtn px={2} mr={2} onClick={() => props.prevPage()}>
-          <Typography variant="h6" component="h6" className="windowsfont">Previous</Typography>
+          <Typography variant="h6" component="p" className="windowsfont">Previous</Typography>
         </WindowsBtn>
         <WindowsBtn px={2} onClick={() => props.nextPage()}>
           <Typography variant="h6" component="p" className="windowsfont">Next</Typography>

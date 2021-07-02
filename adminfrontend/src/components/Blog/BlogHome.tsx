@@ -36,8 +36,8 @@ function BlogHome(props: DefaultProps) {
       <Box mt={1} mb={2}>
         <WindowsBtn onClick={() => history.push('/blog/create')} variant="h5" component="h4" px={2}>Create A Blog</WindowsBtn>
       </Box>
-      { !isLoading && <BlogList Posts={data?.data.Posts} />}
-      { !isLoading && <BlogPageNav pageCount={data?.data.PageCount} nextPage={nextPage} prevPage={prevPage} />}
+      { !isLoading && <BlogList Posts={data?.data.Posts} /> }
+      { !isLoading && <BlogPageNav pageCount={data?.data.PageCount} nextPage={nextPage} prevPage={prevPage} /> }
       <Box position="absolute" height="100vh" width="100vw" top={0} left={0} display={isLoading ? "block" : "none"} className="loadingbg">
         <SyncLoader color="rgb(187,187,187)" loading={isLoading} size={50} />
       </Box>
