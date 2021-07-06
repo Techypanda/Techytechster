@@ -12,7 +12,7 @@ function BlogPreview(props: BlogPrviewProps) {
           <Typography variant="h5" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>{props.blog.BlogTitle}</Typography>
         </Box>
         <Box>
-          <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>Written by {props.blog.Author} on {(new Date(props.blog.Date)).toString()}</Typography>
+          <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>Written by {props.blog.Author} on {(new Date(Number.parseInt(props.blog.Date) / 1000000.0)).toString()}</Typography>
         </Box>
         <Box mt={2}>
           <div id="content" dangerouslySetInnerHTML={{ __html: props.blog.Content }} />
