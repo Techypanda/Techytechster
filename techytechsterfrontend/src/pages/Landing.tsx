@@ -9,7 +9,6 @@ function Landing(props: DefaultProps) {
   const TabletBreakpoint = 1100;
   const MobileBreakpoint = 650;
   const { width } = useViewport();
-  console.log(width);
   if (width > TabletBreakpoint) {
     return <DesktopView className={props.className} />
   } else if (width > MobileBreakpoint) {
