@@ -21,7 +21,7 @@ type DynamoDBBlog struct {
 	Author    string
 }
 
-const COGNITOJWKSURI string = "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_dXWQJmeqM/.well-known/jwks.json"
+const COGNITOJWKSURI string = "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_CoT06Tn1G/.well-known/jwks.json"
 
 func ValidateJWT(accessTokenString string) (bool, error) {
 	keySet, err := jwk.Fetch(context.TODO(), COGNITOJWKSURI)
