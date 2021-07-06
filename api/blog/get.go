@@ -9,6 +9,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -146,6 +147,12 @@ func GetAllEndpoint(request events.APIGatewayProxyRequest) events.APIGatewayProx
 func GetBlogEndpoint(request events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
 	log.Printf("Attempting to get blog: %s", strings.ToUpper(request.PathParameters["operation"]))
 	blogTitle := request.PathParameters["operation"]
+	temp, unencodeErr := url.PathUnescape(blogTitle)
+	if unencodeErr != nil {
+		log.Printf("Failed to url unencode blogtitle: %s, reason: %s, going to assume its not url encoded and continue!", blogTitle, unencodeErr.Error())
+	} else {
+		blogTitle = temp
+	}
 	post, err := GetBlog(strings.ToUpper(blogTitle))
 	if err != nil {
 		log.Printf("Failed to get a post, error occured: %s", err.Error())
