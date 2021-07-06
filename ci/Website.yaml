@@ -38,7 +38,7 @@ Resources:
         - email
         - profile
         - openid
-      ClientName: CapstoneDevLogin
+      ClientName: AdminLogin
       ExplicitAuthFlows:
         - ALLOW_ADMIN_USER_PASSWORD_AUTH
         - ALLOW_CUSTOM_AUTH
