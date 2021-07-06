@@ -3,8 +3,8 @@ import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import BlogCreate from "../components/Blog/BlogCreate";
 import BlogHome from "../components/Blog/BlogHome";
+import BlogPost from "../components/Blog/BlogPost";
 import { DefaultProps } from "../interface";
-import NotFound from "./NotFound";
 
 function Blog(props: DefaultProps) {
 
@@ -20,7 +20,7 @@ function Blog(props: DefaultProps) {
               <BlogCreate />
             </Route>
             <Route>
-              <NotFound />
+              <BlogPost />
             </Route>
           </Switch>
         </Container>
