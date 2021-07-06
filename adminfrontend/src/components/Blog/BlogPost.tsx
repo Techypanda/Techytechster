@@ -8,10 +8,12 @@ import SyncLoader from "react-spinners/SyncLoader";
 import { useState } from "react";
 import BlogNav from "./BlogNav";
 import WindowsBtn from "../shared/WindowsBtn";
+import BlogDeletePrompt from "./BlogDeletePrompt";
 
 function BlogPost(props: DefaultProps) {
   const history = useHistory();
   const [loading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { data, isLoading } = usePost(window.location.pathname.split("/")[3], history)
 
   if (isLoading) {
@@ -46,13 +48,14 @@ function BlogPost(props: DefaultProps) {
         <Box mt={2}>
           <Grid container spacing={2}>
             <Grid item>
-              <WindowsBtn variant="h5" px={2} onClick={() => console.log("Deleting post")}>Delete</WindowsBtn>
+              <WindowsBtn variant="h5" px={2} onClick={() => setOpen(true)}>Delete</WindowsBtn>
             </Grid>
             <Grid item>
               <WindowsBtn variant="h5" px={2} onClick={() => console.log("Editing post")}>Edit</WindowsBtn>
             </Grid>
           </Grid>
         </Box>
+        <BlogDeletePrompt blogTitle={data.data.Title} open={open} setOpen={(state: boolean) => setOpen(state)} />
       </Box>
     )
   } else {

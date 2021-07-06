@@ -44,3 +44,8 @@ export interface WindowsStyleButtonProps extends DefaultProps {
 export interface WindowsRichTextProps extends DefaultProps {
   onChange: (content: string) => void;
 }
+export interface BlogDeletePromptProps extends DefaultProps {
+  open: boolean;
+  blogTitle: string;
+  setOpen: (boolean) => void;
+}
