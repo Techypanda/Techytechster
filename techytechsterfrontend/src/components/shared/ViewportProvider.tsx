@@ -4,7 +4,7 @@ import { DefaultProps } from "../../interface";
 const viewportContext = createContext({});
 
 function ViewportProvider(props: DefaultProps) {
-  const [width, setWidth] = useState(window.innerHeight);
+  const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 
   function handleWindowResize() {
