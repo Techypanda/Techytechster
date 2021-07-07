@@ -1,7 +1,7 @@
 import { Box, TextField } from "@material-ui/core";
 import { useState } from "react";
 import styled from "styled-components";
-import { DefaultProps } from "../../interface";
+import { CreateProps } from "../../interface";
 import WindowsBtn from "../shared/WindowsBtn";
 import WindowsRichText from "../shared/WindowsRichText";
 import BlogNav from "./BlogNav";
@@ -11,11 +11,11 @@ import SyncLoader from "react-spinners/SyncLoader";
 import { useHistory } from "react-router-dom";
 
 
-function BlogCreate(props: DefaultProps) {
+function BlogCreate(props: CreateProps) {
   const history = useHistory();
   const client = useQueryClient();
-  const [blogTitle, setBlogTitle] = useState("");
-  const [blogContent, setBlogContent] = useState("");
+  const [blogTitle, setBlogTitle] = useState(props.update ? props.oldtitle : "");
+  const [blogContent, setBlogContent] = useState(props.update ? props.oldcontent : "");
   const [loading, setLoading] = useState(false);
   async function createBlog() {
     const CreateBlogPayload = {
@@ -29,43 +29,90 @@ function BlogCreate(props: DefaultProps) {
       alert("Missing Blog Content");
     } else {
       setLoading(true);
-      axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
-        headers: {
-          authorization: await client.getQueryData("token")
+      if (props.update) {
+        const UpdateBlogPayload = {
+          newtitle: blogTitle,
+          newcontent: blogContent,
+          newauthor: await client.getQueryData("username"),
+          oldtitle: props.oldtitle,
+          oldcontent: props.oldcontent,
+          oldauthor: props.oldauthor
         }
-      }).then((resp: AxiosResponse) => {
-        alert(resp.data)
-        client.removeQueries("blog")
-        setLoading(false);
-        history.push("/blog");
-      }).catch(async (err: AxiosError) => {
-        if (err.response?.status === 401) {
-          await client.refetchQueries("token")
-          axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
-            headers: {
-              authorization: await client.getQueryData("token")
-            }
-          }).then((resp: AxiosResponse) => {
-            alert(resp.data);
-            client.removeQueries("blog")
-            setLoading(false);
-            history.push("/blog");
-          }).catch(async (err: AxiosError) => {
-            if (err.response?.status === 401) {
-              localStorage.clear();
-              window.location.href = "/";
-            } else {
-              alert(err.response?.data)
-              setLoading(false);
-            }
-          })
-        } else {
-          alert(err.response?.data)
+        axios.post("https://api.techytechster.com/blog/update", UpdateBlogPayload, {
+          headers: {
+            authorization: await client.getQueryData("token")
+          }
+        }).then((resp: AxiosResponse) => {
+          alert(resp.data)
+          client.removeQueries("blog")
           setLoading(false);
-        }
-      })
+          history.push("/blog");
+        }).catch(async (err: AxiosError) => {
+          if (err.response?.status === 401) {
+            await client.refetchQueries("token")
+            axios.post("https://api.techytechster.com/blog/update", CreateBlogPayload, {
+              headers: {
+                authorization: await client.getQueryData("token")
+              }
+            }).then((resp: AxiosResponse) => {
+              alert(resp.data);
+              client.removeQueries("blog")
+              setLoading(false);
+              history.push("/blog");
+            }).catch(async (err: AxiosError) => {
+              if (err.response?.status === 401) {
+                localStorage.clear();
+                window.location.href = "/";
+              } else {
+                alert(err.response?.data)
+                setLoading(false);
+              }
+            })
+          } else {
+            alert(err.response?.data)
+            setLoading(false);
+          }
+        })
+      } else {
+        axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
+          headers: {
+            authorization: await client.getQueryData("token")
+          }
+        }).then((resp: AxiosResponse) => {
+          alert(resp.data)
+          client.removeQueries("blog")
+          setLoading(false);
+          history.push("/blog");
+        }).catch(async (err: AxiosError) => {
+          if (err.response?.status === 401) {
+            await client.refetchQueries("token")
+            axios.post("https://api.techytechster.com/blog/create", CreateBlogPayload, {
+              headers: {
+                authorization: await client.getQueryData("token")
+              }
+            }).then((resp: AxiosResponse) => {
+              alert(resp.data);
+              client.removeQueries("blog")
+              setLoading(false);
+              history.push("/blog");
+            }).catch(async (err: AxiosError) => {
+              if (err.response?.status === 401) {
+                localStorage.clear();
+                window.location.href = "/";
+              } else {
+                alert(err.response?.data)
+                setLoading(false);
+              }
+            })
+          } else {
+            alert(err.response?.data)
+            setLoading(false);
+          }
+        })
+      }
     }
   }
+
   return (
     <Box className={props.className}>
       <BlogNav location="Create" />

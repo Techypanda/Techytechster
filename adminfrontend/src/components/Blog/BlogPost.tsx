@@ -9,13 +9,14 @@ import { useState } from "react";
 import BlogNav from "./BlogNav";
 import WindowsBtn from "../shared/WindowsBtn";
 import BlogDeletePrompt from "./BlogDeletePrompt";
+import BlogCreate from "./BlogCreate";
 
 function BlogPost(props: DefaultProps) {
   const history = useHistory();
   const [loading] = useState(false);
   const [open, setOpen] = useState(false);
   const { data, isLoading } = usePost(window.location.pathname.split("/")[3], history)
-
+  const [editMode, setEdit] = useState(false);
   if (isLoading) {
     return (
       <Box className={props.className}>
@@ -25,39 +26,43 @@ function BlogPost(props: DefaultProps) {
       </Box>
     )
   } else if (data) {
-    return (
-      <Box className={props.className}>
-        <Box mb={2}>
-          <Container maxWidth="xl" className="nopaddingfix">
-            <BlogNav location="Post View" />
-          </Container>
-        </Box>
-        <Container className="graybg">
-          <Box py={3}>
-            <Box>
-              <Typography variant="h4" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${data.data.Title}`)}>{data.data.Title}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${data.data.Title}`)}>Written by {data.data.Author} on {(new Date(Number.parseInt(data.data.Date) / 1000000.0)).toString()}</Typography>
-            </Box>
-            <Box mt={2}>
-              <div id="content" dangerouslySetInnerHTML={{ __html: data.data.Content }} />
-            </Box>
+    if (!editMode) {
+      return (
+        <Box className={props.className}>
+          <Box mb={2}>
+            <Container maxWidth="xl" className="nopaddingfix">
+              <BlogNav location="Post View" />
+            </Container>
           </Box>
-        </Container>
-        <Box mt={2}>
-          <Grid container spacing={2}>
-            <Grid item>
-              <WindowsBtn variant="h5" px={2} onClick={() => setOpen(true)}>Delete</WindowsBtn>
+          <Container className="graybg">
+            <Box py={3}>
+              <Box>
+                <Typography variant="h4" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${data.data.Title}`)}>{data.data.Title}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${data.data.Title}`)}>Written by {data.data.Author} on {(new Date(Number.parseInt(data.data.Date) / 1000000.0)).toString()}</Typography>
+              </Box>
+              <Box mt={2}>
+                <div id="content" dangerouslySetInnerHTML={{ __html: data.data.Content }} />
+              </Box>
+            </Box>
+          </Container>
+          <Box mt={2}>
+            <Grid container spacing={2}>
+              <Grid item>
+                <WindowsBtn variant="h5" px={2} onClick={() => setOpen(true)}>Delete</WindowsBtn>
+              </Grid>
+              <Grid item>
+                <WindowsBtn variant="h5" px={2} onClick={() => setEdit(true)}>Edit</WindowsBtn>
+              </Grid>
             </Grid>
-            <Grid item>
-              <WindowsBtn variant="h5" px={2} onClick={() => console.log("Editing post")}>Edit</WindowsBtn>
-            </Grid>
-          </Grid>
+          </Box>
+          <BlogDeletePrompt blogTitle={data.data.Title} open={open} setOpen={(state: boolean) => setOpen(state)} />
         </Box>
-        <BlogDeletePrompt blogTitle={data.data.Title} open={open} setOpen={(state: boolean) => setOpen(state)} />
-      </Box>
-    )
+      )
+    } else {
+      return <BlogCreate update={true} oldauthor={data.data.Author} oldcontent={data.data.Content} oldtitle={data.data.Title} />
+    }
   } else {
     return <div className={props.className}><NotFound /></div>
   }

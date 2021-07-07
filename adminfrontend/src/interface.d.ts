@@ -14,6 +14,12 @@ export interface WindowsBtnProps extends DefaultProps {
   variant?: "inherit" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "subtitle1" | "subtitle2" | "body1" | "body2" | "caption" | "button" | "overline" | "srOnly";
   component?: React.ElementType<any>;
 }
+export interface CreateProps extends DefaultProps {
+  update?: boolean;
+  oldtitle?: string;
+  oldcontent?: string;
+  oldauthor?: string;
+}
 export interface Page {
   pageNo: number;
   pageKey: string | undefined;
