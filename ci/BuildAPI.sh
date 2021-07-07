@@ -1,7 +1,11 @@
 #!/bin/bash
 cd api
-set -e # stop on error
+set -e
 echo "Building"
 sam build
-echo "Deploying"
-sam deploy
+# echo "Testing API"
+# ./RunSamTests.sh
+# go test -v
+echo "Beginning Deploy Stage"
+sam package --output-template-file packaged-template.yaml --image-repository 128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo --no-progressbar
+sam deploy --template ./packaged-template.yaml --stack-name techytechsterwebapis --region ap-southeast-2 --capabilities CAPABILITY_IAM --image-repository 128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo --parameter-overrides Authentication="false"
