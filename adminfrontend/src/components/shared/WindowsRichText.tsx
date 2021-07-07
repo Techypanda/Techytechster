@@ -1,7 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { WindowsRichTextProps, WindowsStyleButtonProps } from "../../interface";
-import { EditorState, RichUtils, AtomicBlockUtils } from 'draft-js';
+import { EditorState, RichUtils, AtomicBlockUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import Editor, { composeDecorators } from '@draft-js-plugins/editor';
 import createImagePlugin from '@draft-js-plugins/image';
 import createAlignmentPlugin from '@draft-js-plugins/alignment';
@@ -9,11 +9,9 @@ import createFocusPlugin from '@draft-js-plugins/focus';
 import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
 import { ChangeEvent, SetStateAction, useEffect, useRef, useState } from "react";
-import {stateToHTML} from 'draft-js-export-html';
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/focus/lib/plugin.css';
 import '@draft-js-plugins/alignment/lib/plugin.css';
-import WindowsBtn from "./WindowsBtn";
 import { Code, FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatQuote, FormatUnderlined, Image } from "@material-ui/icons";
 
 
@@ -100,7 +98,18 @@ function WindowsRichText(props: WindowsRichTextProps) {
   }
 
   useEffect(() => {
-    props.onChange(stateToHTML(editorState.getCurrentContent()));
+    if (props.initialState) {
+      setEditorState(() => EditorState.push(
+        editorState,
+        convertFromRaw(JSON.parse(props.initialState!)),
+        "remove-range"
+      ));
+    }
+  }, [])
+
+  useEffect(() => {
+    const serializeState = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+    props.onChange(serializeState);
   }, [editorState, props]);
 
   function insertImage(editorState: any, base64: any) {

@@ -119,7 +119,7 @@ function BlogCreate(props: CreateProps) {
       <Box mt={2}>
         <TextField id="blog-title-input" label="Blog Title" variant="filled" className="windowsinput" fullWidth onChange={(e) => setBlogTitle(e.target.value)} value={blogTitle} />
       </Box>
-      <WindowsRichText onChange={(content: string) => setBlogContent(content)} />
+      <WindowsRichText initialState={props.oldcontent} onChange={(content: string) => setBlogContent(content)} />
       <Box mt={2}>
         <WindowsBtn px={2} variant="h5" component="h4" onClick={() => createBlog()}>Create</WindowsBtn>
       </Box>
