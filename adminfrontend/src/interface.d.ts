@@ -51,6 +51,9 @@ export interface WindowsRichTextProps extends DefaultProps {
   onChange: (content: string) => void;
   initialState?: string;
 }
+export interface WindowsRichPreviewProps extends DefaultProps {
+  initialState: string;
+}
 export interface BlogDeletePromptProps extends DefaultProps {
   open: boolean;
   blogTitle: string;

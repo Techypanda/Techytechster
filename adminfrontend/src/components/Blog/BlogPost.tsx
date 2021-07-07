@@ -10,6 +10,7 @@ import BlogNav from "./BlogNav";
 import WindowsBtn from "../shared/WindowsBtn";
 import BlogDeletePrompt from "./BlogDeletePrompt";
 import BlogCreate from "./BlogCreate";
+import WindowsRichPreviewer from "../shared/WindowsRichPreviewer";
 
 function BlogPost(props: DefaultProps) {
   const history = useHistory();
@@ -43,7 +44,7 @@ function BlogPost(props: DefaultProps) {
                 <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${data.data.Title}`)}>Written by {data.data.Author} on {(new Date(Number.parseInt(data.data.Date) / 1000000.0)).toString()}</Typography>
               </Box>
               <Box mt={2}>
-                <div id="content" dangerouslySetInnerHTML={{ __html: data.data.Content }} />
+                <WindowsRichPreviewer initialState={atob(data.data.Content)} />
               </Box>
             </Box>
           </Container>
@@ -61,7 +62,7 @@ function BlogPost(props: DefaultProps) {
         </Box>
       )
     } else {
-      return <BlogCreate update={true} oldauthor={data.data.Author} oldcontent={data.data.Content} oldtitle={data.data.Title} />
+      return <BlogCreate update={true} oldauthor={data.data.Author} oldcontent={atob(data.data.Content)} oldtitle={data.data.Title} />
     }
   } else {
     return <div className={props.className}><NotFound /></div>

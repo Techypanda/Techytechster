@@ -105,6 +105,7 @@ function WindowsRichText(props: WindowsRichTextProps) {
         "remove-range"
       ));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

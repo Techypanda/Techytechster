@@ -2,6 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { BlogPrviewProps } from "../../interface";
+import WindowsRichPreviewer from "../shared/WindowsRichPreviewer";
 
 function BlogPreview(props: BlogPrviewProps) {
   const history = useHistory();
@@ -15,7 +16,9 @@ function BlogPreview(props: BlogPrviewProps) {
           <Typography variant="subtitle2" component="h2" className="msblue redirect" onClick={() => history.push(`/blog/view/${props.blog.BlogTitle}`)}>Written by {props.blog.Author} on {(new Date(Number.parseInt(props.blog.Date) / 1000000.0)).toString()}</Typography>
         </Box>
         <Box mt={2}>
-          <div id="content" dangerouslySetInnerHTML={{ __html: props.blog.Content }} />
+          <div id="content">
+            <WindowsRichPreviewer initialState={atob(props.blog.Content)} />
+          </div>
         </Box>
       </Box>
     </Box>

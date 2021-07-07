@@ -20,7 +20,7 @@ function BlogCreate(props: CreateProps) {
   async function createBlog() {
     const CreateBlogPayload = {
       title: blogTitle,
-      content: blogContent,
+      content: btoa(blogContent!),
       author: await client.getQueryData("username")
     }
     if (!CreateBlogPayload.title) {
@@ -32,7 +32,7 @@ function BlogCreate(props: CreateProps) {
       if (props.update) {
         const UpdateBlogPayload = {
           newtitle: blogTitle,
-          newcontent: blogContent,
+          newcontent: btoa(blogContent!),
           newauthor: await client.getQueryData("username"),
           oldtitle: props.oldtitle,
           oldcontent: props.oldcontent,
@@ -45,6 +45,7 @@ function BlogCreate(props: CreateProps) {
         }).then((resp: AxiosResponse) => {
           alert(resp.data)
           client.removeQueries("blog")
+          client.removeQueries(`blogpost-${encodeURI(blogTitle!)}`)
           setLoading(false);
           history.push("/blog");
         }).catch(async (err: AxiosError) => {
@@ -57,6 +58,7 @@ function BlogCreate(props: CreateProps) {
             }).then((resp: AxiosResponse) => {
               alert(resp.data);
               client.removeQueries("blog")
+              client.removeQueries(`blogpost-${encodeURI(blogTitle!)}`)
               setLoading(false);
               history.push("/blog");
             }).catch(async (err: AxiosError) => {
