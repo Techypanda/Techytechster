@@ -27,6 +27,24 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       TableName: Techytechster-Views
+  WebsiteBlogTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: BlogTitle
+          AttributeType: S
+        - AttributeName: Date
+          AttributeType: N
+      BillingMode: PROVISIONED
+      KeySchema:
+        - AttributeName: BlogTitle
+          KeyType: HASH
+        - AttributeName: Date
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: Techytechster-Blog
   WebsiteVisitorRecord:
     Type: AWS::Serverless::Function
     Properties:
@@ -45,6 +63,24 @@ Resources:
       DockerTag: go1.x-v1
       DockerContext: ./wmetric
       Dockerfile: Dockerfile
+  BlogCUDEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /blog/{operation+} # create/update/delete
+            Method: ANY
+            RestApiId: !Ref WebsiteAPI
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref WebsiteBlogTable
+    Metadata:
+      DockerTag: go1.x-v1
+      DockerContext: ./blog
+      Dockerfile: Dockerfile
   WebsiteAPI:
     Type: AWS::Serverless::Api
     Properties:
@@ -57,7 +93,7 @@ Resources:
         Route53:
           HostedZoneId: Z102258412TWJ99QD5B1H
       Cors:
-        AllowMethods: "'POST, OPTIONS'"
+        AllowMethods: "'GET, POST, OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
         AllowOrigin: "'*'"
       GatewayResponses:
@@ -66,13 +102,13 @@ Resources:
             Headers:
               Access-Control-Allow-Origin: "'*'"
               Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
-              Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
         DEFAULT_5XX:
           ResponseParameters:
             Headers:
               Access-Control-Allow-Origin: "'*'"
               Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
-              Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
 
 
 Outputs:

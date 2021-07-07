@@ -59,7 +59,7 @@ Resources:
         DynamoDBWritePolicy:
           TableName:
             Ref: WebsiteVisitTable
-      ImageUri: websitevisitorrecord:go1.x-v1
+      ImageUri: 128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo:websitevisitorrecord-f2bffc41b4b9-go1.x-v1
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./wmetric
@@ -80,7 +80,7 @@ Resources:
         DynamoDBCrudPolicy:
           TableName:
             Ref: WebsiteBlogTable
-      ImageUri: blogcudendpoint:go1.x-v1
+      ImageUri: 128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo:blogcudendpoint-65b9e5a21aa5-go1.x-v1
     Metadata:
       DockerTag: go1.x-v1
       DockerContext: ./blog

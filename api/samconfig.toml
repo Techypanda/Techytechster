@@ -8,4 +8,4 @@ s3_prefix = "techytechsterwebapis"
 region = "ap-southeast-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-image_repositories = ["WebsiteVisitorRecord=128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo"]
+image_repositories = ["WebsiteVisitorRecord=128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo", "BlogCUDEndpoint=128153249323.dkr.ecr.ap-southeast-2.amazonaws.com/techytechsterapirepo"]
