@@ -28,6 +28,7 @@ Resources:
       CallbackURLs:
         - http://localhost:3000
         - https://admin.techytechster.com
+        - https://www.admin.techytechster.com
       AllowedOAuthFlows:
         - code
         - implicit
