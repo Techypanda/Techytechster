@@ -1,7 +1,7 @@
 #!/bin/bash
-cd techytechsterfrontend
+cd adminfrontend
 set -e # stop on error
-echo "Building Site"
+echo "Building Admin Site"
 yarn install
 yarn build
 cd build
