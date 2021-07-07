@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: Misc Infrastructure
+
+Resources:
+  TechytechsterAPIS:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: techytechsterapirepo
+      LifecyclePolicy:
+        LifecyclePolicyText: '{
+          "rules": [
+            {
+              "rulePriority": 1,
+              "description": "Keep only one untagged image, expire all others",
+              "selection": {
+                "tagStatus": "untagged",
+                "countType": "imageCountMoreThan",
+                "countNumber": 1
+              },
+              "action": {
+                "type": "expire"
+              }
+            }
+          ]
+        }'
+
+Outputs:
+  APIECR:
+    Value: !Ref TechytechsterAPIS

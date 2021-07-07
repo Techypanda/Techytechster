@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Static site template for admin.techytechster.com
+
+Resources:
+  SourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: admin.techytechster
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - '*'
+            AllowedHeaders:
+              - '*'
+            Id: "NoCORS"
+            MaxAge: 3600
+  SourceBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SourceBucket
+      PolicyDocument:
+        Statement:
+        - Action:
+            - 's3:GetObject'
+          Effect: Allow
+          Resource: !Join
+            - ""
+            - - !GetAtt SourceBucket.Arn
+              - '/*'
+          Principal: '*'
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - admin.techytechster.com
+          - www.admin.techytechster.com
+        Origins:
+          - DomainName: !GetAtt SourceBucket.RegionalDomainName
+            Id: !Ref SourceBucket
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: http-only
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: !Ref SourceBucket
+          ViewerProtocolPolicy: "redirect-to-https"
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: false
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+            Headers:
+              - Access-Control-Request-Headers
+              - Access-Control-Request-Method
+              - Origin
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:128153249323:certificate/df0c324d-5ed5-4ccb-b5de-f5a7e61f8040
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+Outputs:
+  SourceBucket:
+    Value: !Ref SourceBucket
+  Cloudfront:
+    Value: !Ref CloudFront

@@ -1,80 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-
-Description: Website Template for techytechster.com
+Description: Static site template for techytechster.com
 
 Resources:
-  AdminUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      AccountRecoverySetting:
-        RecoveryMechanisms:
-          - Name: admin_only
-            Priority: 1
-      AdminCreateUserConfig:
-        AllowAdminCreateUserOnly: True
-      AliasAttributes:
-        - phone_number
-        - email
-        - preferred_username
-      DeviceConfiguration:
-        ChallengeRequiredOnNewDevice: True
-        DeviceOnlyRememberedOnUserPrompt: True
-      MfaConfiguration: "OFF" # MFA cost money, and I'm poor
-      UserPoolName: "AdminUserPool"
-
-  AdminLoginClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      UserPoolId: !Ref AdminUserPool
-      CallbackURLs:
-        - http://localhost:3000
-        - https://admin.techytechster.com
-      AllowedOAuthFlows:
-        - code
-        - implicit
-      AllowedOAuthFlowsUserPoolClient: true
-      AllowedOAuthScopes:
-        - phone
-        - email
-        - profile
-        - openid
-      ClientName: AdminLogin
-      ExplicitAuthFlows:
-        - ALLOW_ADMIN_USER_PASSWORD_AUTH
-        - ALLOW_CUSTOM_AUTH
-        - ALLOW_USER_PASSWORD_AUTH
-        - ALLOW_USER_SRP_AUTH
-        - ALLOW_REFRESH_TOKEN_AUTH
-      SupportedIdentityProviders:
-        - COGNITO
-
-  AdminLoginPage:
-    Type: AWS::Cognito::UserPoolDomain
-    Properties:
-      Domain: techytechsteradmin
-      UserPoolId: !Ref AdminUserPool
-
-  TechytechsterAPIS:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: techytechsterapirepo
-      LifecyclePolicy:
-        LifecyclePolicyText: '{
-          "rules": [
-            {
-              "rulePriority": 1,
-              "description": "Keep only one untagged image, expire all others",
-              "selection": {
-                "tagStatus": "untagged",
-                "countType": "imageCountMoreThan",
-                "countNumber": 1
-              },
-              "action": {
-                "type": "expire"
-              }
-            }
-          ]
-        }'
   SourceBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -154,7 +81,8 @@ Resources:
           - ErrorCode: 403
             ResponseCode: 200
             ResponsePagePath: /index.html
-
 Outputs:
   SourceBucket:
     Value: !Ref SourceBucket
+  Cloudfront:
+    Value: !Ref CloudFront
