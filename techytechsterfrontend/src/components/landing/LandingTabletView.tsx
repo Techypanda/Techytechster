@@ -116,15 +116,15 @@ function TabletView(props: DefaultProps) {
             <Typography variant="h4" component="h2" className="windowsfont" align="center">View My</Typography>
             <Box paddingTop={1}>
               <Grid container spacing={3} justify="center">
-                <Grid item xs={2}>
+                {/* <Grid item xs={2}>
                   <div className="windowsbtn" onClick={() => history.push('/projects')}>Projects</div>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={2}>
                   <div className="windowsbtn" onClick={() => history.push('/resume')}>Resume</div>
                 </Grid>
-                <Grid item xs={2}>
+                {/* <Grid item xs={2}>
                   <div className="windowsbtn" onClick={() => history.push('/blog')}>Blog</div>
-                </Grid>
+                </Grid> */}
               </Grid>
             </Box>
           </Box>

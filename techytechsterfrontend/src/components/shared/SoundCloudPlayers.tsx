@@ -1,23 +1,27 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { DefaultProps } from "../../interface";
+import { useViewport } from "./ViewportProvider";
 
+const unusableBreakpoint = 650;
 function ShilohPlayer(props: DefaultProps) {
+  const { width } = useViewport();
   const [hoverState, setHoverState] = useState("");
   function updateHover(value: string = "hoversoundcloud") {
     setHoverState(value)
-    console.log('hover')
   }
-  return (
-    <div className={props.className} onMouseEnter={() => updateHover()} onMouseLeave={() => updateHover("")}>
-      <div className={`soundcloudplayer ${hoverState}`}>
-        <iframe title="shilohdynasty" width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1266258478&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
-        <div className="soundCloudDiv">
-          <a href="https://soundcloud.com/shilohdynasty" title="Shiloh Dynasty" rel="noreferrer" target="_blank" className="soundCloudAHref">Shiloh Dynasty</a> · <a href="https://soundcloud.com/shilohdynasty/sets/fukai-2" rel="noreferrer" title="Fukai" target="_blank" className="soundCloudAHref">Fukai</a>
+  if (width > unusableBreakpoint) {
+    return (
+      <div className={props.className} onMouseEnter={() => updateHover()} onMouseLeave={() => updateHover("")}>
+        <div className={`soundcloudplayer ${hoverState}`}>
+          <iframe title="shilohdynasty" width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1266258478&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+          <div className="soundCloudDiv">
+            <a href="https://soundcloud.com/shilohdynasty" title="Shiloh Dynasty" rel="noreferrer" target="_blank" className="soundCloudAHref">Shiloh Dynasty</a> · <a href="https://soundcloud.com/shilohdynasty/sets/fukai-2" rel="noreferrer" title="Fukai" target="_blank" className="soundCloudAHref">Fukai</a>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } else { return (<></>) }
 }
 const styledShiloh = styled(ShilohPlayer)`
 .soundCloudDiv {
