@@ -1,5 +1,7 @@
 <svelte:head>
 	<title>Techytechster - Projects</title>
+	<meta property="og:title" content="Jonathan's Projects" />
+	<meta property="og:description" content="See my various projects I am currently working on" />
 </svelte:head>
 <div class="flex justify-center items-center h-screen">
 	<div>

@@ -5,7 +5,8 @@
 
 <svelte:head>
 	<title>Techytechster - Landing</title>
-	<!-- TODO: OG Data -->
+	<meta property="og:title" content="Jonathan Wright - SRE" />
+	<meta property="og:description" content="Jonathan is a Software Reliability Engineer at Woodside Energy" />
 </svelte:head>
 
 <Initial />
