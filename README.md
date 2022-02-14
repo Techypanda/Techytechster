@@ -1,40 +1,21 @@
-# create-svelte
+# Techytechster
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Please visit https://techytechster.com to see the public static site.
+This repository is the sourcecode for my apis and static site, if you wish to fork/use this as a base for something else feel free to.
 
-## Creating a project
+## What does it run on?
 
-If you're seeing this, you've probably already done this step. Congrats!
+I am a AWS shill so everything here runs on my AWS.
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+## APIs
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+All my backend can be found in the API directory, it is written in Golang and I always lean towards serverless solutions so its likely to be lambda/ecs where it has to be.
 
-> Note: the `@next` is temporary
+## Techytechster.com Frontend
 
-## Developing
+The frontend for the public static site can be found at https://techytechster.com, the code is in the techytechsterfrontend directory, its written in React and uses typescript with good programming practices being followed.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Dashboard Showing Static Site & API Status
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment.
+- Currently the only metric I have is page visits from IP Addresses.
+TODO
