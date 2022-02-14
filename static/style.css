@@ -1,0 +1,24 @@
+/* Global CSS */
+/* font-family: 'Inter', sans-serif; */
+:root {
+	--gray: #99aab5;
+	--black: #2c2f33;
+	--darkblack: #23272a;
+	--white: #ffffff;
+	--blue: #7289da;
+}
+html, body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: var(--black);
+}
+body {
+	color: var(--white);
+	margin: 0;
+	box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+a {
+    color: var(--blue);
+}
