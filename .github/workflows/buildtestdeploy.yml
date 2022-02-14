@@ -23,7 +23,7 @@ jobs:
           uses: aws-actions/aws-cloudformation-github-deploy@v1
           with:
             name: TechytechsterStaticSite
-            template: ./ci/TechytechsterStaticSite.yaml
+            template: ./ci/staticsite.yml
             no-fail-on-empty-changeset: "1"
   
   PublicStaticSite:
