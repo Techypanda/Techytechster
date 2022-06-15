@@ -42,6 +42,8 @@ jobs:
           run: chmod +x ./ci/build.sh
         - name: BuildTestDeploy Frontend
           run: ./ci/build.sh
+        - name: Fix File Extensions
+          run: ./replaceHtml.sh
         - uses: jakejarvis/s3-sync-action@master
           with:
             args: --acl public-read --follow-symlinks --delete
