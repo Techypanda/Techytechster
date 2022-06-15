@@ -10,8 +10,12 @@ const config = {
             // default options are shown
             pages: 'build',
             assets: 'build',
-            fallback: null
+            fallback: 'index.html',
+            precompress: false
         }),
+        prerender: {
+            default: true
+        }
         /*
         If you need to serve your file from a sub directory
         paths: {
